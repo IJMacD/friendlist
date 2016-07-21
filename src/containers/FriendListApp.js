@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import FriendListAdd from '../components/FriendListAdd'
 import FriendListItem from '../components/FriendListItem'
-import starFriend from '../actions/FriendsActions'
+import { starFriend, deleteFriend, addFriend } from '../actions/FriendsActions'
 
-let App = ({ friendCount, friends, toggleStar}) => {
+let App = ({ friendCount, friends, toggleStar, deleteFriend, addFriend}) => {
   let containerStyle = {
         width: 200
       },
       headerStyle = {
-        background: '#8080ff',
+        background: '#7575ff',
         color: 'white',
         marginBottom: 0,
         padding: 10,
@@ -22,9 +23,10 @@ let App = ({ friendCount, friends, toggleStar}) => {
   return (
     <div style={containerStyle}>
       <h1 style={headerStyle}>Hello, { friendCount }!</h1>
+      <FriendListAdd onSubmit={addFriend} />
       <ul style={listStyle}>
         {friends.map(friend =>
-          <FriendListItem onClick={toggleStar} friend={friend} key={friend.id} />
+          <FriendListItem onClick={toggleStar} onClickCross={deleteFriend} friend={friend} key={friend.id} />
         )}
       </ul>
     </div>
@@ -40,8 +42,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    toggleStar: () => {
-      dispatch(starFriend(ownProps.id))
+    toggleStar: (id) => {
+      dispatch(starFriend(id))
+    },
+    deleteFriend: (id) => {
+      dispatch(deleteFriend(id))
+    },
+    addFriend: (name) => {
+      dispatch(addFriend(name))
     }
   }
 }
